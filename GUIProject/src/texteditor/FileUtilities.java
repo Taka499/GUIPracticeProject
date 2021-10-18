@@ -27,7 +27,7 @@ public class FileUtilities {
 	
 	public int countWords(StringBuilder fileContent)
 	{
-		return 0;
+		return fileContent.toString().split("[\\n\\s\\,\\.\\;\\:\\(\\)]+").length;
 	}
 	
 	public int[] searchAll(StringBuilder fileContent, String searchString)

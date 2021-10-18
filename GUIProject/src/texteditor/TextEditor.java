@@ -55,9 +55,9 @@ public class TextEditor extends Application {
 		Menu helpMenu = new Menu("Help");
 		
 			// create menu items
-		MenuItem openFileMenuItem = new MenuItem("Open");
+		MenuItem openFileMenuItem = new MenuItem("Open File");
 		MenuItem exitFileMenuItem = new MenuItem("Exit");
-		MenuItem closeFileMenuItem = new MenuItem("Close");
+		MenuItem closeFileMenuItem = new MenuItem("Close File");
 		MenuItem searchToolsMenuItem = new MenuItem("Search");
 		MenuItem replaceToolsMenuItem = new MenuItem("Replace");
 		MenuItem wordCountToolsMenuItem = new MenuItem("Word Count");
@@ -120,6 +120,7 @@ public class TextEditor extends Application {
 				fileTextArea.appendText(fileContent.toString());
 				fileTextArea.setWrapText(true);
 				fileTextArea.positionCaret(0);
+				statusLabel.setText(file.getAbsolutePath());	
 				root.setCenter(fileTextArea);
 			}// end if
 		}// end handle()
