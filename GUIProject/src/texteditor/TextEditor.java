@@ -28,6 +28,8 @@ import javafx.stage.Stage;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
@@ -41,6 +43,7 @@ public class TextEditor extends Application {
 	Label statusLabel = new Label();
 	StringBuilder fileContent;
 	FileUtilities fileUtilities = new FileUtilities();
+	BooleanProperty isFileOpen = new SimpleBooleanProperty(false);
 	
 	public static void main(String[] args) {
 		launch(args);
@@ -90,6 +93,7 @@ public class TextEditor extends Application {
 			{
 				fileTextArea.clear();
 				statusLabel.setText("");
+				isFileOpen.set(false);
 				root.setCenter(null);
 			}
 		});
@@ -106,6 +110,26 @@ public class TextEditor extends Application {
 		toolsMenu.getItems().addAll(searchToolsMenuItem, replaceToolsMenuItem, new SeparatorMenuItem(), wordCountToolsMenuItem);
 		helpMenu.getItems().addAll(aboutHelpMenuItem);
 		menuBar.getMenus().addAll(fileMenu, toolsMenu, helpMenu);
+		
+			// disable the buttons when no file is open
+		BooleanBinding fileIsOpenBinding = new BooleanBinding()
+		{
+			{
+				super.bind(isFileOpen);
+			}
+
+			@Override
+			protected boolean computeValue()
+			{
+				// TODO Auto-generated method stub
+				return !isFileOpen.get();
+			}
+		};
+		saveFileMenuItem.disableProperty().bind(fileIsOpenBinding);
+		closeFileMenuItem.disableProperty().bind(fileIsOpenBinding);
+		searchToolsMenuItem.disableProperty().bind(fileIsOpenBinding);
+		replaceToolsMenuItem.disableProperty().bind(fileIsOpenBinding);
+		wordCountToolsMenuItem.disableProperty().bind(fileIsOpenBinding);
 		
 			// set root children
 		root.setTop(menuBar);
@@ -133,7 +157,8 @@ public class TextEditor extends Application {
 				fileTextArea.appendText(fileContent.toString());
 				fileTextArea.setWrapText(true);
 				fileTextArea.positionCaret(0);
-				statusLabel.setText(file.getAbsolutePath());	
+				statusLabel.setText(file.getAbsolutePath());
+				isFileOpen.set(true);
 				root.setCenter(fileTextArea);
 			}// end if
 		}// end handle()
@@ -301,7 +326,7 @@ public class TextEditor extends Application {
 		@Override
 		public void handle(ActionEvent event)
 		{
-			
+			//TODO
 		}
 	}
 	
@@ -310,7 +335,7 @@ public class TextEditor extends Application {
 		@Override
 		public void handle(ActionEvent event)
 		{
-			
+			//TODO
 		}
 	}
 	
@@ -319,7 +344,7 @@ public class TextEditor extends Application {
 		@Override
 		public void handle(ActionEvent event)
 		{
-			
+			//TODO
 		}
 	}
 }// end TextReader
