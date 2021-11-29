@@ -1,7 +1,10 @@
 package texteditor;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class FileUtilities {
@@ -24,6 +27,20 @@ public class FileUtilities {
 			System.out.println(e.getMessage());
 		}
 		return fileContent;
+	}
+	
+	public boolean writeFile(String filename, StringBuilder fileContent)
+	{
+			// write the file
+		try (BufferedWriter bw = new BufferedWriter(new FileWriter(filename)))
+		{
+			bw.write(fileContent.toString());
+		}
+		catch (IOException e)
+		{
+			return false;
+		}
+		return true;
 	}
 	
 	public int countWords(StringBuilder fileContent)

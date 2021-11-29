@@ -66,6 +66,7 @@ public class TextEditor extends Application {
 		
 			// create menu items
 		MenuItem openFileMenuItem = new MenuItem("Open File");
+		MenuItem saveFileMenuItem = new MenuItem("Save File");
 		MenuItem exitFileMenuItem = new MenuItem("Exit");
 		MenuItem closeFileMenuItem = new MenuItem("Close File");
 		MenuItem searchToolsMenuItem = new MenuItem("Search");
@@ -75,10 +76,12 @@ public class TextEditor extends Application {
 		
 			// attach event handlers
 		openFileMenuItem.setOnAction(new OpenFileHandler());
+		saveFileMenuItem.setOnAction(new SaveFileHandler());
 		searchToolsMenuItem.setOnAction(new SearchToolHandler());
 		replaceToolsMenuItem.setOnAction(new ReplaceToolHandler());
 		wordCountToolsMenuItem.setOnAction(new WordCountToolHandler());
 		aboutHelpMenuItem.setOnAction(new AboutHandler());
+		
 		
 		closeFileMenuItem.setOnAction(new EventHandler<ActionEvent>()
 		{
@@ -99,7 +102,7 @@ public class TextEditor extends Application {
 		
 			// add menu items to menus and menus to menubar
 		MenuBar menuBar = new MenuBar();
-		fileMenu.getItems().addAll(openFileMenuItem, closeFileMenuItem, new SeparatorMenuItem(), exitFileMenuItem);
+		fileMenu.getItems().addAll(openFileMenuItem, saveFileMenuItem, closeFileMenuItem, new SeparatorMenuItem(), exitFileMenuItem);
 		toolsMenu.getItems().addAll(searchToolsMenuItem, replaceToolsMenuItem, new SeparatorMenuItem(), wordCountToolsMenuItem);
 		helpMenu.getItems().addAll(aboutHelpMenuItem);
 		menuBar.getMenus().addAll(fileMenu, toolsMenu, helpMenu);
@@ -135,6 +138,35 @@ public class TextEditor extends Application {
 			}// end if
 		}// end handle()
 	}// end OpenFileHandler
+	
+	private class SaveFileHandler implements EventHandler<ActionEvent>
+	{
+
+		@Override
+		public void handle(ActionEvent event)
+		{
+			FileChooser fileChooser = new FileChooser();
+			fileChooser.setTitle("Save file");
+			String initialPath = Paths.get(".\\data").toAbsolutePath().normalize().toString();
+			fileChooser.setInitialDirectory(new File(initialPath));
+			fileChooser.getExtensionFilters().addAll(
+					new ExtensionFilter("Text Files", "*.txt"),
+					new ExtensionFilter("All Files", "*.*"));
+			File file = null;
+			if ((file = fileChooser.showSaveDialog(stage)) != null)
+			{
+				if (fileUtilities.writeFile(file.getAbsolutePath(), new StringBuilder(fileTextArea.getText())))
+				{
+					statusLabel.setText(String.format("Saved as %s", file.getAbsoluteFile()));
+				}
+				else
+				{
+					statusLabel.setText(String.format("Failed to save as %s", file.getAbsoluteFile()));
+				}
+			}
+		}
+		
+	}
 	
 	// then other Handler...
 	private class SearchToolHandler implements EventHandler<ActionEvent>
